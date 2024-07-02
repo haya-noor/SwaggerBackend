@@ -38,7 +38,7 @@ customerRouter.use(authMiddleware);
 
 customerRouter.get("/", async (req, res) => {
   const controller = new CustomerController();
-  const filter = req.query.filter as string;
+  const filter = req.query['filter'] as string;
 
   controller.getCustomers(
     (status, data) => res.status(status).json(data),
