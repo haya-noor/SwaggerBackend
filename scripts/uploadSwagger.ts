@@ -369,6 +369,7 @@ async function uploadFile() {
 uploadFile();
 */
 
+
 //semantic versioning 
 
 import { google } from 'googleapis';
@@ -507,5 +508,8 @@ async function uploadFile() {
   } catch (error) {
     console.error('Error uploading file:', error);
   }
+
+  console.log("Branch name: ", branchName);
 }
+
 uploadFile();

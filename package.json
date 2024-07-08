@@ -16,20 +16,33 @@
         "dev": "ts-node ./bin/startServer.ts",
         "generate:swagger": "tsoa spec && tsoa routes",
         "upload:swagger": "ts-node scripts/uploadSwagger.ts",
-        "build": "tsc && npm run generate:swagger && npm run upload:swagger"
+        "build": "tsc && npm run generate:swagger && npm run upload:swagger",
+        "release": "standard-version",
+        "postrelease": "git push --follow-tags origin main && npm publish",
+        "preupload": "npm run release"
     },
     "devDependencies": {
+        "@commitlint/cli": "^19.3.0",
+        "@commitlint/config-conventional": "^19.2.2",
         "@types/body-parser": "^1.19.5",
         "@types/cors": "^2.8.17",
         "@types/express": "^4.17.21",
         "@types/uuid": "^10.0.0",
         "@typescript-eslint/eslint-plugin": "^7.14.1",
         "@typescript-eslint/parser": "^7.14.1",
-        "eslint": "^9.5.0",
+        "eslint": "^8.57.0",
+        "husky": "^9.0.11",
         "prettier": "^3.3.2",
+        "standard-version": "^9.5.0",
         "ts-node": "^10.9.2",
         "tsconfig-paths": "^4.2.0",
         "typescript": "^5.5.2",
         "yarn": "^1.22.22"
+    },
+    "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
 }
+}
+
