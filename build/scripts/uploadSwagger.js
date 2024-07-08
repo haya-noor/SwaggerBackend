@@ -8,6 +8,7 @@ const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const child_process_1 = require("child_process");
+const child_process_2 = require("child_process");
 dotenv_1.default.config();
 function getCurrentBranchName() {
     try {
@@ -17,6 +18,13 @@ function getCurrentBranchName() {
     catch (error) {
         console.error('Error getting current branch name:', error);
         return 'unknown';
+    }
+}
+function generateSwaggerJson() {
+    console.log('Generating swagger.json...');
+    const result = (0, child_process_2.spawnSync)('npx', ['tsoa', 'spec'], { stdio: 'inherit' });
+    if (result.error) {
+        console.error('Error generating swagger.json:', result.error);
     }
 }
 function convertJsonToTs(jsonFilePath, tsFilePath) {
@@ -40,6 +48,7 @@ async function uploadFile() {
     const drive = googleapis_1.google.drive({ version: 'v3', auth });
     const jsonFilePath = path_1.default.join(__dirname, '../http/output/swagger.json');
     const tsFilePath = path_1.default.join(__dirname, `../http/output/swagger-${branchName}.ts`);
+    generateSwaggerJson();
     convertJsonToTs(jsonFilePath, tsFilePath);
     try {
         const searchResponse = await drive.files.list({
