@@ -371,7 +371,6 @@ uploadFile();
 
 
 //semantic versioning 
-
 import { google } from 'googleapis';
 import fs from 'fs';
 import path from 'path';
@@ -392,7 +391,7 @@ function getCurrentBranchName() {
   }
 }
 
-// Get version number
+// Get version number from package.json
 function getVersionNumber() {
   try {
     const packageJson = JSON.parse(fs.readFileSync(path.join(__dirname, '../package.json'), 'utf-8'));
