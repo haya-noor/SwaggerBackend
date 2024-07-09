@@ -21,7 +21,7 @@
   },
   "semanticRelease": {
     "branches": [
-      "main",
+      "haya",
       "h-branch1",
       "h-branch2",
       "h-branch3"
