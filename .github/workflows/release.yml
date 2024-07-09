@@ -6,8 +6,7 @@ on:
       - haya
       - h-branch1
       - h-branch2
-      - h-branch3 
-      
+      - h-branch3
 
 jobs:
   release:
@@ -26,10 +25,10 @@ jobs:
           node-version: "lts/*"
 
       - name: Install dependencies
-        run: npm install --force
+        run: npm install
 
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN}} 
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npx semantic-release
