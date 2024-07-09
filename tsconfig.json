@@ -1,9 +1,8 @@
 {
     "compilerOptions": {
-      "target": "ES2019",
-      "module": "NodeNext",
-      "moduleResolution": "NodeNext",
-      "lib": ["ESNext"],
+      "target": "ES2020",
+      "module": "CommonJS",
+      "lib": ["ES2020"],
       "outDir": "./build/",
       "rootDir": "./",
       "baseUrl": "./",
@@ -42,7 +41,7 @@
       "noUncheckedIndexedAccess": true,
       "noUnusedLocals": true,
       "noUnusedParameters": true,
-      "verbatimModuleSyntax": false,
+    
       "checkJs": true,
       "noImplicitAny": false,
       "useUnknownInCatchVariables": true
