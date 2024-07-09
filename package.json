@@ -1,48 +1,26 @@
 {
   "name": "example-server-tsoa",
   "version": "1.0.0",
-  "dependencies": {
-    "body-parser": "^1.20.2",
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
-    "express": "^4.19.2",
-    "tsoa": "^6.3.1",
-    "uuid": "^10.0.0",
-     "jsonwebtoken": "^8.5.1"
-  },
+  "description": "Example server with TSOA",
   "scripts": {
-    "start": "node ./build/bin/startServer.js",
-    "dev": "ts-node ./bin/startServer.ts",
+    "build": "tsc && npm run generate:swagger && npm run upload:swagger",
     "generate:swagger": "tsoa spec && tsoa routes",
     "upload:swagger": "ts-node scripts/uploadSwagger.ts",
-    "build": "tsc && npm run generate:swagger && npm run upload:swagger",
-    "prepare": "husky"
+    "release": "semantic-release"
   },
   "devDependencies": {
-    "@semantic-release/changelog": "^6.0.3",
-    "@semantic-release/commit-analyzer": "^13.0.0",
+    "@semantic-release/changelog": "^6.0.1",
+    "@semantic-release/commit-analyzer": "^9.0.2",
     "@semantic-release/git": "^10.0.1",
-    "@semantic-release/github": "^10.1.0",
-    "@semantic-release/release-notes-generator": "^14.0.1",
-    "@semantic-release/npm": "^12.0.1",
-    "@types/body-parser": "^1.19.5",
-    "@types/cors": "^2.8.17",
-    "@types/express": "^4.17.21",
-    "@types/uuid": "^10.0.0",
-    "@typescript-eslint/eslint-plugin": "^7.14.1",
-    "@typescript-eslint/parser": "^7.14.1",
-    "eslint": "^9.5.0",
-    "prettier": "^3.3.2",
-    "semantic-release": "^24.0.0",
-    "ts-node": "^10.9.2",
-    "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.5.2",
-    "yarn": "^1.22.22",
-    "husky": "^8.0.3",
-    "@types/jsonwebtoken": "^8.5.8"
+    "@semantic-release/github": "^8.0.2",
+    "@semantic-release/npm": "^7.0.2",
+    "@semantic-release/release-notes-generator": "^10.0.3",
+    "@types/node": "^20.1.0",
+    "typescript": "^4.6.2",
+    "ts-node": "^10.9.1"
   },
-  "release": {
-    "branches": ["main"],
+  "semanticRelease": {
+    "branches": ["main", "h-branch1", "h-branch2", "h-branch3"],
     "repositoryUrl": "https://github.com/haya-noor/SwaggerBackend.git",
     "plugins": [
       "@semantic-release/commit-analyzer",
