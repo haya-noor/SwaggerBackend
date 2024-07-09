@@ -6,7 +6,8 @@
     "build": "tsc && npm run generate:swagger && npm run upload:swagger",
     "generate:swagger": "tsoa spec && tsoa routes",
     "upload:swagger": "ts-node scripts/uploadSwagger.ts",
-    "release": "semantic-release"
+    "release": "semantic-release",
+    "dev": "node -r ts-node/register --watch --watch-preserve-output bin/startServer.ts"
   },
   "devDependencies": {
     "@semantic-release/changelog": "^6.0.1",
