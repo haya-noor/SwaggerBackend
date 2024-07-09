@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - haya
+      - h-branch1
+      - h-branch2
+      - h-branch3 
+      
 
 jobs:
   release:

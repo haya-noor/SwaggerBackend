@@ -1,5 +1,5 @@
 {
-  "branches": ["haya"],
+  "branches": ["haya", "h-branch1", "h-branch2", "h-branch3"],
   "repositoryUrl": "https://github.com/haya-noor/SwaggerBackend.git",
   "plugins": [
     "@semantic-release/commit-analyzer",
