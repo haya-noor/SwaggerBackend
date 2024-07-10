@@ -1,6 +1,5 @@
 
 
-//Using hashing technique 
 
 import { google } from 'googleapis';
 import fs from 'fs';
