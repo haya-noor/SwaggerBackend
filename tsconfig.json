@@ -41,7 +41,6 @@
       "noUncheckedIndexedAccess": true,
       "noUnusedLocals": true,
       "noUnusedParameters": true,
-      "verbatimModuleSyntax": false,
       "checkJs": true,
       "noImplicitAny": false,
       "useUnknownInCatchVariables": true
