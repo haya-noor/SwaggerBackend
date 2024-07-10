@@ -2,6 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const http_1 = require("./http");
 class HttpResponse {
+    statusCode;
+    body;
     constructor(statusCode, body) {
         this.statusCode = statusCode;
         this.body = body;

@@ -2,6 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CustomerEntity = void 0;
 class CustomerEntity {
+    firstName;
+    lastName;
+    customerId;
     constructor(customer) {
         this.firstName = customer.firstName;
         this.lastName = customer.lastName;

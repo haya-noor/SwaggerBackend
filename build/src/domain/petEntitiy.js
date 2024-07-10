@@ -2,6 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PetEntity = void 0;
 class PetEntity {
+    name;
+    age;
+    species;
+    customerId;
+    petId;
     constructor(pet) {
         this.age = pet.age;
         this.customerId = pet.customerId;

@@ -2,6 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetCustomersDTO = void 0;
 class GetCustomersDTO {
+    customerId;
+    firstName;
+    lastName;
     constructor(dto) {
         this.customerId = dto.customerId;
         this.firstName = dto.firstName;

@@ -2,6 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AddPetsDTO = void 0;
 class AddPetsDTO {
+    name;
+    age;
+    species;
     constructor(dto) {
         this.name = dto.name;
         this.species = dto.species;
