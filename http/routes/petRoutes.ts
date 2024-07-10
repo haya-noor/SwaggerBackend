@@ -1,11 +1,13 @@
 
 
-
-/*
 import express from 'express';
 import { PetsController } from '../controllers/petsController';
+import { authMiddleware } from './authMiddleware'; 
 
 export const petsRouter = express.Router();
+
+// Apply the middleware to all routes
+petsRouter.use(authMiddleware);
 
 petsRouter.get("/", async (req, res) => {
   const controller = new PetsController();
@@ -15,35 +17,6 @@ petsRouter.get("/", async (req, res) => {
     (status, data) => res.status(status).json(data),
     (status, error) => res.status(status).json(error),
     filter
-  );
-});
-
-petsRouter.post("/", async (req, res) => {
-  const controller = new PetsController();
-
-  controller.addPets(
-    req.body,
-    (status, data) => res.status(status).json(data),
-    (status, error) => res.status(status).json(error)
-  );
-});
-*/
-
-import express from 'express';
-import { PetsController } from '../controllers/petsController';
-
-export const petsRouter = express.Router();
-
-petsRouter.get("/", async (req, res) => {
-  const controller = new PetsController();
-
-  controller.getPets(
-    (status, data) => res.status(status).json(data),
-    (status, error) => res.status(status).json(error),
-    req.query['name'] as string,
-    req.query['species'] as string,
-    req.query['customerId'] as string,
-    req.query['color'] as string
   );
 });
 
