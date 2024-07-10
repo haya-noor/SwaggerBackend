@@ -2,8 +2,12 @@
 
 import express from 'express';
 import { PetsController } from '../controllers/petsController';
+import { authMiddleware } from './authMiddleware'; 
 
 export const petsRouter = express.Router();
+
+// Apply the middleware to all routes
+petsRouter.use(authMiddleware);
 
 petsRouter.get("/", async (req, res) => {
   const controller = new PetsController();
