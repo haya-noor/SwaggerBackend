@@ -1,8 +1,7 @@
 
 import express from 'express';
 import { CustomerController } from '../controllers/customersController';
-import { authMiddleware } from '../../http/routes/authMiddleware';
-
+import { authMiddleware } from '../routes/authMiddleware';
 export const customerRouter = express.Router();
 
 // Apply the middleware to all routes in this router
