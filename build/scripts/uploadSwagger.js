@@ -8,7 +8,7 @@ const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const child_process_1 = require("child_process");
-const child_process_2 = require("child_process");
+const crypto_1 = __importDefault(require("crypto"));
 dotenv_1.default.config();
 function getCurrentBranchName() {
     try {
@@ -22,7 +22,7 @@ function getCurrentBranchName() {
 }
 function generateSwaggerJson() {
     console.log('Generating swagger.json...');
-    const result = (0, child_process_2.spawnSync)('npx', ['tsoa', 'spec'], { stdio: 'inherit' });
+    const result = (0, child_process_1.spawnSync)('npx', ['tsoa', 'spec'], { stdio: 'inherit' });
     if (result.error) {
         console.error('Error generating swagger.json:', result.error);
     }
@@ -32,6 +32,8 @@ function convertJsonToTs(jsonFilePath, tsFilePath) {
     const jsonObject = JSON.parse(jsonContent);
     const tsContent = `const swaggerSpec = ${JSON.stringify(jsonObject, null, 2)} as const;\nexport default swaggerSpec;\n`;
     fs_1.default.writeFileSync(tsFilePath, tsContent, 'utf-8');
+    const hash = crypto_1.default.createHash('md5').update(tsContent).digest('hex');
+    return hash;
 }
 async function uploadFile() {
     const keyFile = process.env['GOOGLE_SERVICE_ACCOUNT_KEY'];
@@ -49,39 +51,21 @@ async function uploadFile() {
     const jsonFilePath = path_1.default.join(__dirname, '../http/output/swagger.json');
     const tsFilePath = path_1.default.join(__dirname, `../http/output/swagger-${branchName}.ts`);
     generateSwaggerJson();
-    convertJsonToTs(jsonFilePath, tsFilePath);
+    const hash = convertJsonToTs(jsonFilePath, tsFilePath);
+    const fileName = `swagger-${branchName}-${hash}.ts`;
     try {
         const searchResponse = await drive.files.list({
-            q: `name='swagger-${branchName}.ts' and '${folderId}' in parents and trashed=false`,
+            q: `name='${fileName}' and '${folderId}' in parents and trashed=false`,
             fields: 'files(id, name)',
         });
         const files = searchResponse.data.files ?? [];
         if (files.length > 0 && files[0]?.id) {
-            const fileId = files[0].id ?? '';
-            console.log(`Found existing swagger-${branchName}.ts file for branch ${branchName} with ID: ${fileId}. Updating it...`);
-            const media = {
-                mimeType: 'application/typescript',
-                body: fs_1.default.createReadStream(tsFilePath),
-            };
-            const updateResponse = await drive.files.update({
-                fileId: fileId,
-                media: media,
-                fields: 'id, name',
-                requestBody: {
-                    name: `swagger-${branchName}.ts`,
-                },
-            });
-            if (updateResponse.data && 'id' in updateResponse.data) {
-                console.log(`Updated swagger-${branchName}.ts file with ID: ${updateResponse.data.id} from branch: ${branchName}`);
-            }
-            else {
-                console.error('Unexpected response format:', updateResponse.data);
-            }
+            console.log(`File with name ${fileName} already exists in Google Drive. Skipping upload.`);
         }
         else {
-            console.log(`No existing swagger-${branchName}.ts file found for branch ${branchName}. Uploading a new one...`);
+            console.log(`No existing file found with name ${fileName}. Uploading new file...`);
             const fileMetadata = {
-                name: `swagger-${branchName}.ts`,
+                name: fileName,
                 parents: [folderId],
             };
             const media = {
@@ -94,7 +78,7 @@ async function uploadFile() {
                 fields: 'id, name',
             });
             if (uploadResponse.data && 'id' in uploadResponse.data) {
-                console.log(`Uploaded new swagger-${branchName}.ts file with ID: ${uploadResponse.data.id} from branch: ${branchName}`);
+                console.log(`Uploaded new file with ID: ${uploadResponse.data.id} and name: ${fileName}`);
             }
             else {
                 console.error('Unexpected response format:', uploadResponse.data);
@@ -104,6 +88,5 @@ async function uploadFile() {
     catch (error) {
         console.error('Error uploading file:', error);
     }
-    console.log("Branch name: ", branchName);
 }
 uploadFile();

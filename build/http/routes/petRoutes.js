@@ -6,7 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.petsRouter = void 0;
 const express_1 = __importDefault(require("express"));
 const petsController_1 = require("../controllers/petsController");
+const authMiddleware_1 = require("./authMiddleware");
 exports.petsRouter = express_1.default.Router();
+exports.petsRouter.use(authMiddleware_1.authMiddleware);
 exports.petsRouter.get("/", async (req, res) => {
     const controller = new petsController_1.PetsController();
     const filter = req.query['filter'];

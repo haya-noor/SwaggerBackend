@@ -17,6 +17,7 @@ const addPetsDTO_1 = require("../../src/application/dto/addPetsDTO");
 const getPetsDTO_1 = require("../../src/application/dto/getPetsDTO");
 const petsService_1 = require("../../src/application/petsService");
 const tsoa_1 = require("tsoa");
+const authMiddleware_1 = require("../routes/authMiddleware");
 let PetsController = class PetsController extends tsoa_1.Controller {
     async getPets(success, error, query) {
         try {
@@ -41,10 +42,10 @@ let PetsController = class PetsController extends tsoa_1.Controller {
         }
     }
 };
-exports.PetsController = PetsController;
 __decorate([
     (0, tsoa_1.SuccessResponse)("200", "Found"),
     (0, tsoa_1.Get)("/"),
+    (0, tsoa_1.Middlewares)(authMiddleware_1.authMiddleware),
     __param(0, (0, tsoa_1.Res)()),
     __param(1, (0, tsoa_1.Res)()),
     __param(2, (0, tsoa_1.Query)()),
@@ -62,6 +63,7 @@ __decorate([
     __metadata("design:paramtypes", [addPetsDTO_1.AddPetsDTO, Function, Function]),
     __metadata("design:returntype", Promise)
 ], PetsController.prototype, "addPets", null);
-exports.PetsController = PetsController = __decorate([
+PetsController = __decorate([
     (0, tsoa_1.Route)("/petsapp/pet")
 ], PetsController);
+exports.PetsController = PetsController;

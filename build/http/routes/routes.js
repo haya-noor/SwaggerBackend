@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RegisterRoutes = RegisterRoutes;
+exports.RegisterRoutes = void 0;
 const runtime_1 = require("@tsoa/runtime");
 const petsController_1 = require("./../controllers/petsController");
 const customersController_1 = require("./../controllers/customersController");
@@ -146,3 +146,4 @@ function RegisterRoutes(app) {
         }
     });
 }
+exports.RegisterRoutes = RegisterRoutes;

@@ -41,7 +41,6 @@ let CustomerController = class CustomerController extends tsoa_1.Controller {
         }
     }
 };
-exports.CustomerController = CustomerController;
 __decorate([
     (0, tsoa_1.SuccessResponse)("200", "Found"),
     (0, tsoa_1.Get)("/"),
@@ -62,6 +61,7 @@ __decorate([
     __metadata("design:paramtypes", [addCustomerDTO_1.AddCustomerDTO, Function, Function]),
     __metadata("design:returntype", Promise)
 ], CustomerController.prototype, "addCustomer", null);
-exports.CustomerController = CustomerController = __decorate([
+CustomerController = __decorate([
     (0, tsoa_1.Route)("/customersapp/customer")
 ], CustomerController);
+exports.CustomerController = CustomerController;
