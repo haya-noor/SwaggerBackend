@@ -1,6 +1,5 @@
 
 
-
 import { google } from 'googleapis';
 import fs from 'fs';
 import path from 'path';
@@ -31,20 +30,30 @@ function generateSwaggerJson() {
   }
 }
 
-// Convert JSON to TypeScript and generate MD5 checksum
-function convertJsonToTs(jsonFilePath: string, tsFilePath: string): string {
-  const jsonContent = fs.readFileSync(jsonFilePath, 'utf-8');
-  const jsonObject = JSON.parse(jsonContent);
-  const tsContent = `const swaggerSpec = ${JSON.stringify(jsonObject, null, 2)} as const;\nexport default swaggerSpec;\n`;
-  fs.writeFileSync(tsFilePath, tsContent, 'utf-8');
-  
-  const hash = crypto.createHash('md5').update(tsContent).digest('hex');
-  return hash;
+// Compute MD5 checksum of the JSON content
+function computeChecksum(filePath: string): string {
+  const content = fs.readFileSync(filePath, 'utf-8');
+  return crypto.createHash('md5').update(content).digest('hex');
+}
+
+// Function to update the .env file with the new hash
+function updateEnvFile(newHash: string) {
+  const envFilePath = path.join(__dirname, '../.env');
+  let envContent = fs.readFileSync(envFilePath, 'utf-8');
+
+  if (envContent.includes('SWAGGER_HASH=')) {
+    envContent = envContent.replace(/SWAGGER_HASH=.*/, `SWAGGER_HASH=${newHash}`);
+  } else {
+    envContent += `\nSWAGGER_HASH=${newHash}`;
+  }
+
+  fs.writeFileSync(envFilePath, envContent, 'utf-8');
 }
 
 async function uploadFile() {
   const keyFile = process.env['GOOGLE_SERVICE_ACCOUNT_KEY'];
   const folderId = process.env['GOOGLE_DRIVE_FOLDER_ID'];
+  const storedHash = process.env['SWAGGER_HASH'];
 
   if (!keyFile || !folderId) {
     console.error('Missing GOOGLE_SERVICE_ACCOUNT_KEY or GOOGLE_DRIVE_FOLDER_ID in environment variables.');
@@ -61,18 +70,22 @@ async function uploadFile() {
   const drive = google.drive({ version: 'v3', auth });
 
   const jsonFilePath = path.join(__dirname, '../http/output/swagger.json');
-  const tsFilePath = path.join(__dirname, `../http/output/swagger-${branchName}.ts`);
 
   // Generate swagger.json file
   generateSwaggerJson();
 
-  // Convert swagger.json to swagger-${branchName}.ts and get checksum
-  const hash = convertJsonToTs(jsonFilePath, tsFilePath);
+  // Compute checksum for swagger.json
+  const newHash = computeChecksum(jsonFilePath);
 
-  const fileName = `swagger-${branchName}-${hash}.ts`;
+  if (storedHash === newHash) {
+    console.log('The file has not changed. Skipping upload.');
+    return;
+  }
+
+  const fileName = `swagger-${branchName}-${newHash}.json`;
 
   try {
-    // Search for the existing TypeScript file
+    // Search for the existing JSON file
     const searchResponse = await drive.files.list({
       q: `name='${fileName}' and '${folderId}' in parents and trashed=false`,
       fields: 'files(id, name)',
@@ -84,14 +97,14 @@ async function uploadFile() {
     } else {
       console.log(`No existing file found with name ${fileName}. Uploading new file...`);
 
-      // Upload the new TypeScript file
+      // Upload the new JSON file
       const fileMetadata = {
         name: fileName,
         parents: [folderId],
       };
       const media = {
-        mimeType: 'application/typescript',
-        body: fs.createReadStream(tsFilePath),
+        mimeType: 'application/json',
+        body: fs.createReadStream(jsonFilePath),
       };
 
       const uploadResponse = await drive.files.create({
@@ -102,6 +115,8 @@ async function uploadFile() {
 
       if (uploadResponse.data && 'id' in uploadResponse.data) {
         console.log(`Uploaded new file with ID: ${uploadResponse.data.id} and name: ${fileName}`);
+        // Update the .env file with the new hash
+        updateEnvFile(newHash);
       } else {
         console.error('Unexpected response format:', uploadResponse.data);
       }
