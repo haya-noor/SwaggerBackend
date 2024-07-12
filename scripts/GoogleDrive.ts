@@ -1,8 +1,7 @@
 import fs from 'fs';
-//import path from 'path';
-import { AbstractGoogleDrive } from './AbstractGoogleDrive';
+import { StorageService } from './StorageService';
 
-export class GoogleDrive extends AbstractGoogleDrive {
+export class GoogleDrive extends StorageService {
   async uploadFile(fileName: string, filePath: string, mimeType: string): Promise<void> {
     const folderId = process.env['GOOGLE_DRIVE_FOLDER_ID'];
     if (!folderId) {

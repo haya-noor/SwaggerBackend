@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-export abstract class AbstractGoogleDrive {
+export abstract class StorageService {
   protected auth: any;
   protected drive: any;
 
