@@ -1,4 +1,4 @@
-# Typesafe Server Generator
+# Typesafe Server 
 
 ## Project Overview
 This project aims to create and manage API routes using TSOA, while automating the process of uploading schema files to Google Drive. It supports multiple developers working on different branches, ensuring efficient schema handling by appending branch names and hashes to schema files.
@@ -52,19 +52,19 @@ After generating the schema using TSOA, the `UploadSwagger.ts` script uploads th
 
 1. **Generate Schema:** Generate the `schema.json` file with TSOA, containing all API routes and definitions.
 2. **Husky Hook:** Configure Husky to run a script before every commit or build, automating the schema upload to Google Drive.
-3. **Upload Script:** The `storingSchema.ts` script uses the Google Drive API to upload `schema.json` to a specific folder, ensuring the latest schema is always accessible to the frontend.
+3. **Upload Script:** The `UploadSwagger.ts` script uses the Google Drive API to upload `schema.json` to a specific folder, ensuring the latest schema is always accessible to the frontend.
 
 ## Branch-specific Schema Handling
-To differentiate schemas from different branches, the schema file name includes the branch name. The `storingSchema.ts` script fetches the current branch and appends it to the schema file name before uploading.
+To differentiate schemas from different branches, the schema file name includes the branch name. The `UploadSwagger.ts` script fetches the current branch and appends it to the schema file name before uploading.
 
 ### Step-by-Step Process
 
-1. **Fetch Current Branch:** The `storingSchema.ts` script fetches the current Git branch.
+1. **Fetch Current Branch:** The `UploadSwagger.ts` script fetches the current Git branch.
 2. **Append Branch Name:** Append the branch name to the `schema.json` file name (e.g., `schema-main.json` for the main branch).
 3. **Upload with Branch Name:** Upload the schema file with the appended branch name to Google Drive, allowing multiple schemas from different branches to coexist without overwriting each other.
 
 ## Schema Hashing
-To minimize unnecessary uploads, the schema file name includes a checksum. The `storingSchema.ts` script calculates the MD5 checksum of the schema file and compares it to avoid uploading identical files.
+To minimize unnecessary uploads, the schema file name includes a checksum. The `UploadSwagger.ts` script calculates the MD5 checksum of the schema file and compares it to avoid uploading identical files.
 
 ### Step-by-Step Process
 
