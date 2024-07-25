@@ -17,7 +17,6 @@ Clone the repository:
 
 ```bash
 git clone https://github.com/haya-noor/SwaggerBackend.git
-cd example-server-tsoa
 ```
 
 Install the dependencies:
@@ -47,7 +46,7 @@ npm install
    ```
 
 ## Schema Upload Process
-After generating the schema using TSOA, the `storingSchema.ts` script uploads the generated `schema.json` to Google Drive. This script runs before every commit or build using Husky.
+After generating the schema using TSOA, the `UploadSwagger.ts` script uploads the generated `schema.json` to Google Drive. This script runs before every commit or build using Husky.
 
 ### Step-by-Step Process
 
